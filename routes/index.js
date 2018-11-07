@@ -76,4 +76,23 @@ router.post('/delete', function (req, res) {
         }
     });
 });
+
+router.post('/inquiry', function (req, res) {
+    var json = req.body;
+    var sql = 'select * from user WHERE ?';
+    req.getConnection(function (err, conn) {
+        if (err) {
+            return next(err);
+        } else {
+            conn.query(sql, json, function (err, result) {
+                if (err) {
+                    return next(err);
+                } else {
+                    res.json({ success: true, data: result });
+                }
+            });
+        }
+    });
+});
+
 module.exports = router;

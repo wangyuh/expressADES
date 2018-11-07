@@ -129,6 +129,18 @@
                 $("#editSubmit").attr("status", 'edit')
                 $("#editSubmit").attr("rid", $(this).attr("rid"));
                 $('#myModal').modal('show');
+                $.ajax({
+                    url: baseUrl + "/index/inquiry",
+                    type: "post",
+                    data: {id:$(this).attr("rid")},
+                    success: function (d) {
+                        if (d.success) {
+                            $(".editForm input[name='name']").val(d.data[0].name)
+                            $(".editForm input[name='age']").val(d.data[0].age)
+                            $(".editForm input[name='password']").val(d.data[0].password)
+                        }
+                    }
+                })
             })
         }
         $(function () {
