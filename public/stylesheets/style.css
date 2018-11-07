@@ -1,0 +1,74 @@
+body{
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
+}
+input,button{
+  outline:none;
+}
+#canvas{
+  position: absolute;
+  z-index:-1;
+}
+.canvasBg{
+  position: absolute;
+  width:100%;
+  height:100%;
+  z-index:1;
+  background: url(../images/in_top_bj.jpg);
+  background-size: 100% 100%;
+  filter:alpha(opacity=40);  
+      	-moz-opacity:0.4;  
+      	-khtml-opacity: 0.4;  
+      	opacity: 0.4;
+}
+.login_box{
+  position: absolute;
+  z-index: 10;
+  width:400px;
+  height: 245px;
+  border:1px solid #000;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  margin: auto;
+  border-radius: 5px;
+  background: rgba(159, 160, 166,.1);
+}
+.login_box .login_header{
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+  color: #ffffff;
+  font-size: 16px;
+}
+.login_box input{
+  width: 170px;
+  height: 35px;
+  margin: auto;
+  display: block;
+  background: rgba(0,0,0,.3);
+  border: 0px;
+  border-radius: 20px;
+  margin-top: 25px;
+  color: #fff;
+  padding: 0 10px;
+}
+.login_box button{
+  margin:30px auto 0;
+  display: block;
+  width: 65px;
+  height: 30px;
+  border: 2px solid #89CAE0;
+  border-radius: 30px;
+  cursor: pointer;
+  background: rgba(1,1,1,.1);
+  color: #fff;
+}
+.login_box .error_info{
+  color:red;
+  text-align: center;
+}

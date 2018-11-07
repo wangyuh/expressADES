@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script src="javascripts/lib/jquery.min.js"></script>
+</head>
+<body>
+   <canvas id="canvas"></canvas> 
+   <canvas class="canvasBg"></canvas> 
+   <div class="login_box">
+       <form action="" onsubmit="return false;">
+            <div class="login_header">系统登陆</div>
+            <input type="text" class="name">
+            <div class="error_info"></div>
+            <input type="password" class="password">
+            <button id="submit">登陆</button>
+       </form>        
+   </div>
+   <script src="javascripts/lib/canvasBg.js"></script>
+   <script src="javascripts/app/login.js"></script>
+</body>
+</html>

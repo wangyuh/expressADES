@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title></title>
+    <link rel="stylesheet" href="stylesheets/pintuer.css">
+    <link rel="stylesheet" href="stylesheets/admin.css">
+    <script src="javascripts/lib/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="javascripts/lib/pintuer.js"></script>
+</head>
+
+<body>
+    <form method="post" action="">
+        <div class="panel admin-panel">
+            <div class="panel-head"><strong class="icon-reorder"> 用户管理</strong></div>
+            <div class="padding border-bottom">
+                <ul class="search">
+                    <li>
+                        <button type="button" class="button border-green" id="add"><span class="icon-check"></span>
+                            新增</button>
+                    </li>
+                </ul>
+            </div>
+            <table class="table table-hover text-center">
+                <thead>
+                    <tr>
+                        <th width="120">ID</th>
+                        <th>姓名</th>
+                        <th>年龄</th>
+                        <th>密码</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+
+            </table>
+        </div>
+    </form>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        新增
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="editForm">
+                        <div class="form-group">
+                            <label for="name">姓名</label>
+                            <input type="text" class="form-control" name="name" placeholder="请输入姓名">
+                        </div>
+                        <div class="form-group">
+                            <label for="age">年龄</label>
+                            <input type="text" class="form-control" name="age" placeholder="请输入年龄">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">密码</label>
+                            <input type="text" class="form-control" name="password" placeholder="请输入密码">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="editSubmit">
+                        提交
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <script type="text/javascript">
+        var baseUrl = "http://192.168.70.239:3000";
+        function init() {
+            $(".table tbody").empty();
+            $.ajax({
+                url: baseUrl + "/index/list",
+                type: "get",
+                success: function (d) {
+                    if (d.success) {
+                        $.each(d.data, function (i, o) {
+                            var html = `<tr>
+                                        <td>${o.id}</td>
+                                        <td>${o.name}</td>
+                                        <td>${o.age}</td>
+                                        <td>${o.password}</td>
+                                        <td>
+                                            <div class="button-group delete" rid="${o.id}"> <a class="button border-red" href="javascript:void(0)""><span
+                                                        class="icon-trash-o"></span> 删除</a> </div>
+                                            <div class="button-group edit" rid="${o.id}"> <a class="button border-green href="javascript:void(0)""><span
+                                            class="icon-trash-o"></span> 修改</a> </div>
+                                        </td>
+                                    </tr>`
+                            $(".table tbody").append(html);
+                        })
+                    }
+                    del()
+                }
+            })
+        }
+        function del() {
+            $('.delete').unbind().on("click", function () {
+                if (confirm("您确定要删除吗?")) {
+                    $.ajax({
+                    url: baseUrl + "/index/delete",
+                    type: "post",
+                    data: {id:$(this).attr("rid")},
+                    success: function (d) {
+                        if (d.success) {
+                            init();
+                            $('#myModal').modal('hide');
+                        }
+                    }
+                })
+                }
+            })
+            $('.edit').unbind().on("click", function () {
+                $("#editSubmit").attr("status", 'edit')
+                $("#editSubmit").attr("rid", $(this).attr("rid"));
+                $('#myModal').modal('show');
+            })
+        }
+        $(function () {
+            $("#add").on("click", function () {
+                $("#editSubmit").attr("status", 'add')
+                $('#myModal').modal('show');
+            })
+        })
+        $("#editSubmit").unbind().on("click", function () {
+            if ($(this).attr("status") == "add") {
+                $.ajax({
+                    url: baseUrl + "/index/add",
+                    type: "post",
+                    data: { name: $(".editForm input[name='name']").val(), age: $(".editForm input[name='age']").val(), password: $(".editForm input[name='password']").val() },
+                    success: function (d) {
+                        if (d.success) {
+                            init();
+                            $('#myModal').modal('hide');
+                        }
+                    }
+                })
+            }else if($(this).attr("status") == "edit"){
+                $.ajax({
+                    url: baseUrl + "/index/edit",
+                    type: "post",
+                    data: {id:$("#editSubmit").attr("rid"), name: $(".editForm input[name='name']").val(), age: $(".editForm input[name='age']").val(), password: $(".editForm input[name='password']").val() },
+                    success: function (d) {
+                        if (d.success) {
+                            init();
+                            $('#myModal').modal('hide');
+                        }
+                    }
+                })
+            }
+
+        })
+        init();        
+    </script>
+</body>
+
+</html>
